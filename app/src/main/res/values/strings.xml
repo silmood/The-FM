@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">The FM</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="network_error">Ups! There is a problem with your internet connection</string>
+</resources>

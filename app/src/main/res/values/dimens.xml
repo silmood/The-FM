@@ -1,0 +1,10 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="artist_item_width">172dp</dimen>
+    <dimen name="artist_item_height">192dp</dimen>
+    <dimen name="artist_data_box">78dp</dimen>
+
+    <dimen name="offset_grid">14px</dimen>
+</resources>
