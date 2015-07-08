@@ -13,6 +13,17 @@ import android.view.ViewGroup;
 
 import com.platzi.silmood.thefm.MainActivity;
 import com.platzi.silmood.thefm.R;
+import com.platzi.silmood.thefm.domain.Artist;
+import com.platzi.silmood.thefm.io.LastFmApiAdapter;
+import com.platzi.silmood.thefm.io.model.HypedArtistsResponse;
+import com.platzi.silmood.thefm.ui.adapter.HypedArtistsAdapter;
+
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,14 +41,20 @@ import com.platzi.silmood.thefm.R;
  * Created by Pedro Hernández on 07/2015.
  */
 
-public class HypedArtistsFragment extends Fragment{
+public class HypedArtistsFragment extends Fragment implements Callback<HypedArtistsResponse> {
 
     public static final int NUM_COLUMNS = 2;
 
     public static final String LOG_TAG = HypedArtistsFragment.class.getName();
 
     private RecyclerView mHypedArtistsList;
+    private HypedArtistsAdapter adapter;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new HypedArtistsAdapter(getActivity());
+    }
 
     @Nullable
     @Override
@@ -46,10 +63,33 @@ public class HypedArtistsFragment extends Fragment{
 
         mHypedArtistsList = (RecyclerView) root.findViewById(R.id.hyped_artists_list);
 
+        setupArtistsList();
+
         return root;
     }
 
-    private void setupArtitsList(){
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        LastFmApiAdapter.getApiService()
+                .getHypedArtists(this);
+    }
+
+    private void setupArtistsList(){
         mHypedArtistsList.setLayoutManager(new GridLayoutManager(getActivity(), NUM_COLUMNS));
+        mHypedArtistsList.setAdapter(adapter);
+        mHypedArtistsList.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.integer.offset));
+    }
+
+
+    @Override
+    public void success(HypedArtistsResponse hypedArtistsResponse, Response response) {
+        adapter.addAll(hypedArtistsResponse.getArtists());
+    }
+
+    @Override
+    public void failure(RetrofitError error) {
+        error.printStackTrace();
     }
 }
