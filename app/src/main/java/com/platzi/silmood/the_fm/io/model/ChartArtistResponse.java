@@ -1,5 +1,6 @@
 package com.platzi.silmood.the_fm.io.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.platzi.silmood.the_fm.domain.Artist;
 
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * <p/>
  * Created by Pedro Hernández on 07/2015.
  */
-public class HypedArtistResponse {
+public class ChartArtistResponse {
 
     @SerializedName(JsonKeys.ARTISTS_RESPONSE)
     private MainResponse mainResponse;
@@ -29,9 +30,12 @@ public class HypedArtistResponse {
         return  mainResponse.artists;
     }
 
+    public void setArtists(ArrayList<Artist> artists) {
+        mainResponse.artists = artists;
+    }
+
     private class MainResponse {
 
-        @SerializedName(JsonKeys.ARTISTS_ARRAY)
         private ArrayList<Artist> artists;
 
     }

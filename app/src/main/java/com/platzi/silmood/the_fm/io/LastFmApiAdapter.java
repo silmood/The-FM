@@ -1,6 +1,12 @@
 package com.platzi.silmood.the_fm.io;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.platzi.silmood.the_fm.io.deserializer.ChartArtistsResponseDeserializer;
+import com.platzi.silmood.the_fm.io.model.ChartArtistResponse;
+
 import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +33,7 @@ public class LastFmApiAdapter {
             RestAdapter adapter = new RestAdapter.Builder()
                     .setEndpoint(ApiConstants.BASE_URL)
                     .setLogLevel(RestAdapter.LogLevel.BASIC)
+                    .setConverter(buildLastFmApiGsonConverter())
                     .build();
 
             API_SERVICE = adapter.create(LastFmApiService.class);
@@ -34,6 +41,14 @@ public class LastFmApiAdapter {
 
         return API_SERVICE;
 
+    }
+
+    private static GsonConverter buildLastFmApiGsonConverter() {
+        Gson gsonConf = new GsonBuilder()
+                .registerTypeAdapter(ChartArtistResponse.class, new ChartArtistsResponseDeserializer())
+                .create();
+
+        return new GsonConverter(gsonConf);
     }
 
 }

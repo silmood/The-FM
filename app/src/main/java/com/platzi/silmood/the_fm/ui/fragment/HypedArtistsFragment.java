@@ -10,33 +10,39 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.platzi.silmood.the_fm.R;
+import com.platzi.silmood.the_fm.domain.Artist;
 import com.platzi.silmood.the_fm.io.LastFmApiAdapter;
-import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
+import com.platzi.silmood.the_fm.io.LastFmApiService;
+import com.platzi.silmood.the_fm.io.model.ChartArtistResponse;
 import com.platzi.silmood.the_fm.ui.ItemOffsetDecoration;
 import com.platzi.silmood.the_fm.ui.adapter.HypedArtistsAdapter;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func2;
+import rx.schedulers.Schedulers;
 
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * <p/>
+ * <p>
  * Created by Pedro Hernández on 07/2015.
  */
 
-public class HypedArtistsFragment extends Fragment implements Callback<HypedArtistResponse> {
+public class HypedArtistsFragment extends Fragment implements Callback<ChartArtistResponse> {
 
     public static final int COLUMNS = 2;
 
@@ -45,7 +51,7 @@ public class HypedArtistsFragment extends Fragment implements Callback<HypedArti
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root =  inflater.inflate(R.layout.fragment_hyped_artists, container, false);
+        View root = inflater.inflate(R.layout.fragment_hyped_artists, container, false);
 
         artistList = (RecyclerView) root.findViewById(R.id.artist_list);
         adapter = new HypedArtistsAdapter(getActivity());
@@ -64,18 +70,54 @@ public class HypedArtistsFragment extends Fragment implements Callback<HypedArti
 
     private void requestHypedArtists() {
         LastFmApiAdapter.getApiService()
-                .getHypedArtists(this);
+                .getHypedArtists()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(hypedArtistResponse -> {
+                    adapter.addAll(hypedArtistResponse.getArtists());
+                });
     }
 
-    private void setupList(){
+    private void requestFirstHypedArtist() {
+
+        LastFmApiAdapter.getApiService()
+                .getHypedArtists()
+                .flatMap(hypedArtistResponse -> {
+                    Artist firstArtist = hypedArtistResponse.getArtists().get(0);
+                    return LastFmApiAdapter.getApiService().getArtistInfo(firstArtist.getName());
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(adapter::addItem);
+    }
+
+    private void requestInfoForEachArtist(){
+        LastFmApiAdapter.getApiService()
+                .getHypedArtists()
+                .flatMap(hypedArtistResponse -> Observable.from(hypedArtistResponse.getArtists()))
+                .flatMap(artist -> LastFmApiAdapter.getApiService().getArtistInfo(artist.getName()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(adapter::addItem);
+    }
+
+    private void requestFiteredByListeners(){
+        LastFmApiAdapter.getApiService()
+                .getHypedArtists()
+                .flatMap(hypedArtistResponse -> Observable.from(hypedArtistResponse.getArtists()))
+                .flatMap(artist -> LastFmApiAdapter.getApiService().getArtistInfo(artist.getName()))
+                .filter(artist -> artist.getListeners() < 30000)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(adapter::addItem);
+    }
+
+
+    private void setupList() {
         artistList.setLayoutManager(new GridLayoutManager(getActivity(), COLUMNS));
         artistList.setAdapter(adapter);
-        artistList.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.dimen.offset_grid));
+        artistList.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.integer.offset_grid));
     }
 
     @Override
-    public void success(HypedArtistResponse hypedArtistResponse, Response response) {
-        adapter.addAll(hypedArtistResponse.getArtists());
+    public void success(ChartArtistResponse chartArtistResponse, Response response) {
+        adapter.addAll(chartArtistResponse.getArtists());
     }
 
     @Override

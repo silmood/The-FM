@@ -15,24 +15,18 @@
         android:scaleType="centerCrop"
         android:src="@drawable/artist_placeholder" />
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/artist_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/artist_data_box"
         android:layout_gravity="bottom"
+        android:background="@drawable/background_artist_name"
+        android:clickable="true"
         android:gravity="center"
-        android:orientation="vertical"
-        android:padding="4dp"
-        android:background="@color/accent_transparency">
+        android:maxLines="2"
+        android:textColor="@color/text"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/artist_name"
-            android:gravity="center"
-            android:maxLines="2"
-            android:textStyle="bold"
-            android:textColor="@color/text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
 
 </android.support.v7.widget.CardView>
