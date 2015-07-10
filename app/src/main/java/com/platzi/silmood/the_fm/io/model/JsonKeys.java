@@ -30,4 +30,5 @@ public class JsonKeys {
     public static final String IMAGE_LARGE = "mega";
     public static final String ARTIST_LISTENERS = "listeners";
     public static final String ARTIST_PLAY_COUNT = "playcount";
+    public static final String ARTIST_STATS = "stats";
 }

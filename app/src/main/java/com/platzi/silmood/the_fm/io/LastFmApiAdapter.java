@@ -2,6 +2,8 @@ package com.platzi.silmood.the_fm.io;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.platzi.silmood.the_fm.domain.Artist;
+import com.platzi.silmood.the_fm.io.deserializer.ArtistInfoResponseDeserializer;
 import com.platzi.silmood.the_fm.io.deserializer.ChartArtistsResponseDeserializer;
 import com.platzi.silmood.the_fm.io.model.ChartArtistResponse;
 
@@ -46,6 +48,7 @@ public class LastFmApiAdapter {
     private static GsonConverter buildLastFmApiGsonConverter() {
         Gson gsonConf = new GsonBuilder()
                 .registerTypeAdapter(ChartArtistResponse.class, new ChartArtistsResponseDeserializer())
+                .registerTypeAdapter(Artist.class, new ArtistInfoResponseDeserializer())
                 .create();
 
         return new GsonConverter(gsonConf);

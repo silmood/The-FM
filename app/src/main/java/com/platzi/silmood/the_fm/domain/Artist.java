@@ -1,12 +1,10 @@
 package com.platzi.silmood.the_fm.domain;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.platzi.silmood.the_fm.io.model.JsonKeys;
 
@@ -40,7 +38,7 @@ public class Artist {
     @Nullable
     private String urlLargeImage;
 
-    private String bio;
+    private String bioSummary;
 
     private boolean onTour;
 
@@ -89,12 +87,12 @@ public class Artist {
         this.onTour = onTour;
     }
 
-    public String getBio() {
-        return bio;
+    public String getBioSummary() {
+        return bioSummary;
     }
 
-    public void setBio(String bio) {
-        this.bio = bio;
+    public void setBioSummary(String bioSummary) {
+        this.bioSummary = bioSummary;
     }
 
     public int getListeners() {

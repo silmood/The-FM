@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.platzi.silmood.the_fm.R;
 import com.platzi.silmood.the_fm.domain.Artist;
 import com.platzi.silmood.the_fm.io.LastFmApiAdapter;
-import com.platzi.silmood.the_fm.io.LastFmApiService;
 import com.platzi.silmood.the_fm.io.model.ChartArtistResponse;
 import com.platzi.silmood.the_fm.ui.ItemOffsetDecoration;
 import com.platzi.silmood.the_fm.ui.adapter.HypedArtistsAdapter;
@@ -22,8 +21,6 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func2;
-import rx.schedulers.Schedulers;
 
 
 /**
@@ -65,7 +62,7 @@ public class HypedArtistsFragment extends Fragment implements Callback<ChartArti
     public void onResume() {
         super.onResume();
 
-        requestHypedArtists();
+        requestFilteredByListeners();
     }
 
     private void requestHypedArtists() {
@@ -98,12 +95,12 @@ public class HypedArtistsFragment extends Fragment implements Callback<ChartArti
                 .subscribe(adapter::addItem);
     }
 
-    private void requestFiteredByListeners(){
+    private void requestFilteredByListeners(){
         LastFmApiAdapter.getApiService()
                 .getHypedArtists()
                 .flatMap(hypedArtistResponse -> Observable.from(hypedArtistResponse.getArtists()))
                 .flatMap(artist -> LastFmApiAdapter.getApiService().getArtistInfo(artist.getName()))
-                .filter(artist -> artist.getListeners() < 30000)
+                .filter(artist -> artist.getListeners() < 2500)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(adapter::addItem);
     }
