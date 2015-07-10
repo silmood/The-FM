@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="190dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/artist_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/gradient_background"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="4dp"
+            android:textColor="@color/text"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/artist_playcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:drawableLeft="@drawable/ic_play"
+                android:drawableStart="@drawable/ic_play"
+                android:gravity="center"
+                android:textColor="@color/text" />
+
+            <TextView
+                android:id="@+id/artist_listeners"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_listener"
+                android:drawableStart="@drawable/ic_listener"
+                android:gravity="center"
+                android:textColor="@color/text" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

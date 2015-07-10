@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * <p/>
  * Created by Pedro Hernández on 07/2015.
  */
-public class ChartArtistResponse {
+public class HypedArtistResponse {
 
     @SerializedName(JsonKeys.ARTISTS_RESPONSE)
     private MainResponse mainResponse;

@@ -1,7 +1,7 @@
 package com.platzi.silmood.the_fm.io;
 
 import com.platzi.silmood.the_fm.domain.Artist;
-import com.platzi.silmood.the_fm.io.model.ChartArtistResponse;
+import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
 
 import retrofit.Callback;
 import retrofit.http.GET;
@@ -26,17 +26,20 @@ import rx.Observable;
 public interface LastFmApiService {
 
     @GET(ApiConstants.URL_HYPED_ARTISTS)
-    void getHypedArtists(Callback<ChartArtistResponse> serverResponse);
+    void getHypedArtists(Callback<HypedArtistResponse> serverResponse);
+
+    @GET(ApiConstants.URL_TOP_ARTIST)
+    void getTopArtists(Callback<HypedArtistResponse> serverRespones);
 
     @GET(ApiConstants.URL_ARTIST_INFO)
     void getArtistInfo(@Query(ApiConstants.PARAM_ARTIST) String artistName, Callback<Artist> serverResponse);
 
     @GET(ApiConstants.URL_HYPED_ARTISTS)
-    Observable<ChartArtistResponse> getHypedArtists();
+    Observable<HypedArtistResponse> getHypedArtists();
 
     @GET(ApiConstants.URL_ARTIST_INFO)
     Observable<Artist> getArtistInfo(@Query(ApiConstants.PARAM_ARTIST) String name);
 
     @GET(ApiConstants.URL_TOP_ARTIST)
-    Observable<ChartArtistResponse> getTopArtists();
+    Observable<HypedArtistResponse> getTopArtists();
 }

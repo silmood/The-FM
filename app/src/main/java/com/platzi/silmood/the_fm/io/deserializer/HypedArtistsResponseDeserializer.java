@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.platzi.silmood.the_fm.domain.Artist;
-import com.platzi.silmood.the_fm.io.model.ChartArtistResponse;
+import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
 import com.platzi.silmood.the_fm.io.model.JsonKeys;
 
 import java.lang.reflect.Type;
@@ -29,12 +29,12 @@ import java.util.ArrayList;
  * <p/>
  * Created by Pedro Hernández on 07/2015.
  */
-public class ChartArtistsResponseDeserializer implements JsonDeserializer<ChartArtistResponse> {
+public class HypedArtistsResponseDeserializer implements JsonDeserializer<HypedArtistResponse> {
 
     @Override
-    public ChartArtistResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public HypedArtistResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         Gson gson = new Gson();
-        ChartArtistResponse response = gson.fromJson(json, ChartArtistResponse.class);
+        HypedArtistResponse response = gson.fromJson(json, HypedArtistResponse.class);
 
         //The artists array will be parsed manually due nested elements
         JsonObject artistsResponseData = json.getAsJsonObject().getAsJsonObject(JsonKeys.ARTISTS_RESPONSE);

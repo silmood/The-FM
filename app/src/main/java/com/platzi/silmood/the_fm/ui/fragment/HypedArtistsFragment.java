@@ -10,16 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.platzi.silmood.the_fm.R;
-import com.platzi.silmood.the_fm.domain.Artist;
 import com.platzi.silmood.the_fm.io.LastFmApiAdapter;
-import com.platzi.silmood.the_fm.io.model.ChartArtistResponse;
+import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
 import com.platzi.silmood.the_fm.ui.ItemOffsetDecoration;
 import com.platzi.silmood.the_fm.ui.adapter.HypedArtistsAdapter;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 
 
@@ -39,7 +37,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by Pedro Hernández on 07/2015.
  */
 
-public class HypedArtistsFragment extends Fragment implements Callback<ChartArtistResponse> {
+public class HypedArtistsFragment extends Fragment implements Callback<HypedArtistResponse> {
 
     public static final int COLUMNS = 2;
 
@@ -62,7 +60,7 @@ public class HypedArtistsFragment extends Fragment implements Callback<ChartArti
     public void onResume() {
         super.onResume();
 
-        requestFilteredByListeners();
+        requestHypedArtists();
     }
 
     private void requestHypedArtists() {
@@ -74,36 +72,6 @@ public class HypedArtistsFragment extends Fragment implements Callback<ChartArti
                 });
     }
 
-    private void requestFirstHypedArtist() {
-
-        LastFmApiAdapter.getApiService()
-                .getHypedArtists()
-                .flatMap(hypedArtistResponse -> {
-                    Artist firstArtist = hypedArtistResponse.getArtists().get(0);
-                    return LastFmApiAdapter.getApiService().getArtistInfo(firstArtist.getName());
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(adapter::addItem);
-    }
-
-    private void requestInfoForEachArtist(){
-        LastFmApiAdapter.getApiService()
-                .getHypedArtists()
-                .flatMap(hypedArtistResponse -> Observable.from(hypedArtistResponse.getArtists()))
-                .flatMap(artist -> LastFmApiAdapter.getApiService().getArtistInfo(artist.getName()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(adapter::addItem);
-    }
-
-    private void requestFilteredByListeners(){
-        LastFmApiAdapter.getApiService()
-                .getHypedArtists()
-                .flatMap(hypedArtistResponse -> Observable.from(hypedArtistResponse.getArtists()))
-                .flatMap(artist -> LastFmApiAdapter.getApiService().getArtistInfo(artist.getName()))
-                .filter(artist -> artist.getListeners() < 2500)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(adapter::addItem);
-    }
 
 
     private void setupList() {
@@ -113,8 +81,8 @@ public class HypedArtistsFragment extends Fragment implements Callback<ChartArti
     }
 
     @Override
-    public void success(ChartArtistResponse chartArtistResponse, Response response) {
-        adapter.addAll(chartArtistResponse.getArtists());
+    public void success(HypedArtistResponse hypedArtistResponse, Response response) {
+        adapter.addAll(hypedArtistResponse.getArtists());
     }
 
     @Override
