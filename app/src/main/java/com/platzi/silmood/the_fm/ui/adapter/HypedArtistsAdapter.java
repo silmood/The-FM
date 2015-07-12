@@ -43,7 +43,7 @@ public class HypedArtistsAdapter extends RecyclerView.Adapter<HypedArtistsAdapte
     @Override
     public HypedArtistHolder onCreateViewHolder(ViewGroup container, int position) {
         View artistView = LayoutInflater.from(context)
-                .inflate(R.layout.artist_grid_item, container, false);
+                .inflate(R.layout.item_hyped_artists, container, false);
 
         return new HypedArtistHolder(artistView);
     }

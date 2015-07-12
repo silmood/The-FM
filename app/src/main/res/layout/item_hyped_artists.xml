@@ -10,7 +10,7 @@
 
 
     <ImageView
-        android:id="@+id/img_artist"
+        android:id="@+id/artist_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -18,13 +18,12 @@
 
 
     <TextView
-        android:id="@+id/txt_name"
+        android:id="@+id/artist_name"
         android:layout_width="match_parent"
         android:layout_height="78dp"
         android:layout_gravity="bottom"
         android:background="@color/accent_transparency"
         android:gravity="center"
-        android:text="Daft Punk"
         android:textColor="@color/text"
         android:textStyle="bold" />
 
