@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
+def LAST_FM_API_KEY ='"' + LastFMApiKey + '"' ?: '"Define LastFm Api key"';
+
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -13,10 +16,12 @@ android {
         versionName "1.0"
     }
     buildTypes {
-        release {
-            minifyEnabled false
+        debug {
+            buildConfigField 'String', 'LAST_FM_API_KEY', LAST_FM_API_KEY
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
 
     compileOptions {
@@ -31,6 +36,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.android.support:cardview-v7:22.2.0'
+    compile 'com.android.support:design:22.2.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'io.reactivex:rxandroid:0.25.0'

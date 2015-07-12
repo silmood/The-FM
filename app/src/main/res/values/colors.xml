@@ -9,5 +9,6 @@
     <color name="text">#ffeeeeee</color>
     <color name="text_secondary">#B6B6B6</color>
     <color name="accent_transparency_dark">#cd4d1d1d</color>
+    <color name="primary_dark_transparency">#80040408</color>
 
 </resources>

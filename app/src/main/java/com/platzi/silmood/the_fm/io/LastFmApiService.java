@@ -2,6 +2,7 @@ package com.platzi.silmood.the_fm.io;
 
 import com.platzi.silmood.the_fm.domain.Artist;
 import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
+import com.platzi.silmood.the_fm.io.model.TopArtistsResponse;
 
 import retrofit.Callback;
 import retrofit.http.GET;
@@ -26,20 +27,20 @@ import rx.Observable;
 public interface LastFmApiService {
 
     @GET(ApiConstants.URL_HYPED_ARTISTS)
-    void getHypedArtists(Callback<HypedArtistResponse> serverResponse);
+    void getHypedArtists(@Query(ApiConstants.PARAM_API_KEY) String key,Callback<HypedArtistResponse> serverResponse);
 
     @GET(ApiConstants.URL_TOP_ARTIST)
-    void getTopArtists(Callback<HypedArtistResponse> serverRespones);
+    void getTopArtists(@Query(ApiConstants.PARAM_API_KEY) String key,Callback<TopArtistsResponse> serverRespones);
 
     @GET(ApiConstants.URL_ARTIST_INFO)
-    void getArtistInfo(@Query(ApiConstants.PARAM_ARTIST) String artistName, Callback<Artist> serverResponse);
+    void getArtistInfo(@Query(ApiConstants.PARAM_API_KEY) String key, @Query(ApiConstants.PARAM_ARTIST) String artistName, Callback<Artist> serverResponse);
 
     @GET(ApiConstants.URL_HYPED_ARTISTS)
-    Observable<HypedArtistResponse> getHypedArtists();
+    Observable<HypedArtistResponse> getHypedArtists(@Query(ApiConstants.PARAM_API_KEY) String key);
 
     @GET(ApiConstants.URL_ARTIST_INFO)
-    Observable<Artist> getArtistInfo(@Query(ApiConstants.PARAM_ARTIST) String name);
+    Observable<Artist> getArtistInfo(@Query(ApiConstants.PARAM_API_KEY) String key,@Query(ApiConstants.PARAM_ARTIST) String name);
 
     @GET(ApiConstants.URL_TOP_ARTIST)
-    Observable<HypedArtistResponse> getTopArtists();
+    Observable<TopArtistsResponse> getTopArtists(@Query(ApiConstants.PARAM_API_KEY) String key);
 }

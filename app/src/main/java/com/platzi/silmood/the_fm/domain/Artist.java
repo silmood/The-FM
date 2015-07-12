@@ -42,8 +42,10 @@ public class Artist {
 
     private boolean onTour;
 
+    @SerializedName(JsonKeys.ARTIST_LISTENERS)
     private int listeners;
 
+    @SerializedName(JsonKeys.ARTIST_PLAY_COUNT)
     private int playCount;
 
     private ArrayList<Artist> relatedArtist;

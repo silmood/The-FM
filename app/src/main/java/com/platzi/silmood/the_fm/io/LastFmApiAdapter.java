@@ -2,13 +2,17 @@ package com.platzi.silmood.the_fm.io;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.platzi.silmood.the_fm.BuildConfig;
 import com.platzi.silmood.the_fm.domain.Artist;
 import com.platzi.silmood.the_fm.io.deserializer.ArtistInfoResponseDeserializer;
 import com.platzi.silmood.the_fm.io.deserializer.HypedArtistsResponseDeserializer;
+import com.platzi.silmood.the_fm.io.deserializer.TopArtistDeserializer;
 import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
+import com.platzi.silmood.the_fm.io.model.TopArtistsResponse;
 
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
+import rx.Observable;
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,10 +52,22 @@ public class LastFmApiAdapter {
     private static GsonConverter buildLastFmApiGsonConverter() {
         Gson gsonConf = new GsonBuilder()
                 .registerTypeAdapter(HypedArtistResponse.class, new HypedArtistsResponseDeserializer())
-                .registerTypeAdapter(Artist.class, new ArtistInfoResponseDeserializer())
+                .registerTypeAdapter(TopArtistsResponse.class, new TopArtistDeserializer())
                 .create();
 
         return new GsonConverter(gsonConf);
+    }
+
+    public static Observable<HypedArtistResponse> getHypedArtist(){
+        return getApiService().getHypedArtists(obtainApiKey());
+    }
+
+    public static Observable<TopArtistsResponse> getTopArtist(){
+        return getApiService().getTopArtists(obtainApiKey());
+    }
+
+    private static String obtainApiKey (){
+        return BuildConfig.LAST_FM_API_KEY;
     }
 
 }

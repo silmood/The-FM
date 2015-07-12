@@ -3,8 +3,6 @@ package com.platzi.silmood.the_fm.io;
 
 public class ApiConstants {
 
-    public static final String API_KEY = "123ae7ccee87798c55c82b64c792a083";
-
     public static final String BASE_URL = "http://ws.audioscrobbler.com";
 
     public static final String PATH_VERSION = "/2.0";
@@ -19,15 +17,15 @@ public class ApiConstants {
     public static final String VALUE_TOP_ARTISTS_METHOD = "chart.gettopartists";
     public static final String VALUE_ARTIST_INFO_METHOD = "artist.getinfo";
 
-    public static final String URL_HYPED_ARTISTS = PATH_VERSION + "?" + PARAM_API_KEY + "=" + API_KEY
+    public static final String URL_HYPED_ARTISTS = PATH_VERSION + "?"
             + "&" + PARAM_FORMAT + "=" + VALUE_JSON
             + "&" + PARAM_METHOD + "=" + VALUE_HYPED_ARTISTS_METHOD;
 
-    public static final String URL_ARTIST_INFO = PATH_VERSION + "?" + PARAM_API_KEY + "=" + API_KEY
+    public static final String URL_ARTIST_INFO = PATH_VERSION + "?"
             + "&" + PARAM_FORMAT + "=" + VALUE_JSON
             + "&" + PARAM_METHOD + "=" + VALUE_ARTIST_INFO_METHOD;
 
-    public static final String URL_TOP_ARTIST = PATH_VERSION + "?" + PARAM_API_KEY + "=" + API_KEY
+    public static final String URL_TOP_ARTIST = PATH_VERSION + "?"
             + "&" + PARAM_FORMAT + "=" + VALUE_JSON
             + "&" + PARAM_METHOD + "=" + VALUE_TOP_ARTISTS_METHOD;
 }
