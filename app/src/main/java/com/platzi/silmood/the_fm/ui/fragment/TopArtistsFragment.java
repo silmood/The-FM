@@ -58,6 +58,10 @@ public class TopArtistsFragment extends Fragment implements Callback<TopArtistsR
     @Override
     public void onResume() {
         super.onResume();
+        requestTopArtists();
+    }
+
+    private void requestTopArtists() {
         LastFmApiAdapter.getTopArtists(this);
     }
 
