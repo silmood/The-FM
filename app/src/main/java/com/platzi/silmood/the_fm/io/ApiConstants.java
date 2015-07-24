@@ -17,15 +17,17 @@ public class ApiConstants {
     public static final String VALUE_TOP_ARTISTS_METHOD = "chart.gettopartists";
     public static final String VALUE_ARTIST_INFO_METHOD = "artist.getinfo";
 
-    public static final String URL_HYPED_ARTISTS = PATH_VERSION + "?"
+    public static final String URL_HYPED_ARTISTS = BASE_URL + PATH_VERSION + "?"
             + "&" + PARAM_FORMAT + "=" + VALUE_JSON
-            + "&" + PARAM_METHOD + "=" + VALUE_HYPED_ARTISTS_METHOD;
+            + "&" + PARAM_METHOD + "=" + VALUE_HYPED_ARTISTS_METHOD + "&" + PARAM_API_KEY + "=";
+
+    public static final String URL_TOP_ARTIST = BASE_URL + PATH_VERSION + "?"
+            + "&" + PARAM_FORMAT + "=" + VALUE_JSON
+            + "&" + PARAM_METHOD + "=" + VALUE_TOP_ARTISTS_METHOD + "&" + PARAM_API_KEY + "=";
 
     public static final String URL_ARTIST_INFO = PATH_VERSION + "?"
             + "&" + PARAM_FORMAT + "=" + VALUE_JSON
             + "&" + PARAM_METHOD + "=" + VALUE_ARTIST_INFO_METHOD;
 
-    public static final String URL_TOP_ARTIST = PATH_VERSION + "?"
-            + "&" + PARAM_FORMAT + "=" + VALUE_JSON
-            + "&" + PARAM_METHOD + "=" + VALUE_TOP_ARTISTS_METHOD;
+
 }

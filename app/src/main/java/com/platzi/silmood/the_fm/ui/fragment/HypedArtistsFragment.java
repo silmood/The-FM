@@ -10,17 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.platzi.silmood.the_fm.BuildConfig;
 import com.platzi.silmood.the_fm.R;
-import com.platzi.silmood.the_fm.io.LastFmApiAdapter;
-import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
+import com.platzi.silmood.the_fm.domain.Artist;
+import com.platzi.silmood.the_fm.io.ApiConstants;
+import com.platzi.silmood.the_fm.io.VolleySingleton;
 import com.platzi.silmood.the_fm.ui.ItemOffsetDecoration;
 import com.platzi.silmood.the_fm.ui.adapter.HypedArtistsAdapter;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import rx.android.schedulers.AndroidSchedulers;
+import org.json.JSONObject;
 
 
 /**
@@ -39,7 +41,9 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by Pedro Hernández on 07/2015.
  */
 
-public class HypedArtistsFragment extends Fragment implements Callback<HypedArtistResponse> {
+public class HypedArtistsFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener {
+
+    public static final String TAG = HypedArtistsFragment.class.getSimpleName();
 
     public static final int COLUMNS = 2;
 
@@ -65,14 +69,23 @@ public class HypedArtistsFragment extends Fragment implements Callback<HypedArti
     }
 
     private void requestHypedArtists() {
-        LastFmApiAdapter.getHypedArtist()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(hypedArtistResponse -> {
-                    adapter.addAll(hypedArtistResponse.getArtists());
-                });
+
+        String urlHypedArtists = ApiConstants.URL_HYPED_ARTISTS + BuildConfig.LAST_FM_API_KEY;
+        Log.d(TAG, urlHypedArtists);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlHypedArtists, this, this);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
     }
 
+    @Override
+    public void onResponse(JSONObject response) {
+        adapter.addAll(Artist.parseJsonArtists(response));
+    }
 
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_LONG).show();
+    }
 
     private void setupList() {
         artistList.setLayoutManager(new GridLayoutManager(getActivity(), COLUMNS));
@@ -80,15 +93,4 @@ public class HypedArtistsFragment extends Fragment implements Callback<HypedArti
         artistList.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.integer.offset_grid));
     }
 
-    @Override
-    public void success(HypedArtistResponse hypedArtistResponse, Response response) {
-        adapter.addAll(hypedArtistResponse.getArtists());
-    }
-
-    @Override
-    public void failure(RetrofitError error) {
-        if (error.getKind() == RetrofitError.Kind.NETWORK) {
-            Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_LONG).show();
-        }
-    }
 }

@@ -4,20 +4,25 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.platzi.silmood.the_fm.BuildConfig;
 import com.platzi.silmood.the_fm.R;
-import com.platzi.silmood.the_fm.io.LastFmApiAdapter;
-import com.platzi.silmood.the_fm.io.LastFmApiService;
-import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
-import com.platzi.silmood.the_fm.io.model.TopArtistsResponse;
+import com.platzi.silmood.the_fm.domain.Artist;
+import com.platzi.silmood.the_fm.io.ApiConstants;
+import com.platzi.silmood.the_fm.io.VolleySingleton;
 import com.platzi.silmood.the_fm.ui.ItemDividerDecoration;
 import com.platzi.silmood.the_fm.ui.adapter.TopArtistAdapter;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import org.json.JSONObject;
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,10 +39,13 @@ import rx.functions.Action1;
  * <p>
  * Created by Pedro Hernández on 07/2015.
  */
-public class TopArtistsFragment extends Fragment {
+public class TopArtistsFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener {
+
+    public static final String TAG = HypedArtistsFragment.class.getSimpleName();
 
     private RecyclerView artistList;
     private TopArtistAdapter adapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,11 +61,26 @@ public class TopArtistsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        LastFmApiAdapter.getTopArtist()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topArtistsResponse -> {
-                    adapter.addAll(topArtistsResponse.getArtists());
-                });
+        requestTopArtists();
+    }
+
+
+    private void requestTopArtists() {
+        String urlTopArtists = ApiConstants.URL_TOP_ARTIST + BuildConfig.LAST_FM_API_KEY;
+        Log.d(TAG, urlTopArtists);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlTopArtists, this, this);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        adapter.addAll(Artist.parseJsonArtists(response));
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_LONG).show();
     }
 
     private void setupList() {
@@ -65,5 +88,4 @@ public class TopArtistsFragment extends Fragment {
         artistList.setAdapter(adapter);
         artistList.addItemDecoration(new ItemDividerDecoration(getActivity()));
     }
-
 }
