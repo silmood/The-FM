@@ -30,7 +30,7 @@ public interface LastFmApiService {
     void getHypedArtists(@Query(ApiConstants.PARAM_API_KEY) String key,Callback<HypedArtistResponse> serverResponse);
 
     @GET(ApiConstants.URL_TOP_ARTIST)
-    void getTopArtists(@Query(ApiConstants.PARAM_API_KEY) String key,Callback<TopArtistsResponse> serverRespones);
+    void getTopArtists(@Query(ApiConstants.PARAM_API_KEY) String key,Callback<TopArtistsResponse> serverResponse);
 
     @GET(ApiConstants.URL_ARTIST_INFO)
     void getArtistInfo(@Query(ApiConstants.PARAM_API_KEY) String key, @Query(ApiConstants.PARAM_ARTIST) String artistName, Callback<Artist> serverResponse);

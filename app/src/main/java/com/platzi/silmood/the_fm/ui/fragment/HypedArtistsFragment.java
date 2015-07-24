@@ -4,13 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.platzi.silmood.the_fm.BuildConfig;
 import com.platzi.silmood.the_fm.R;
 import com.platzi.silmood.the_fm.io.LastFmApiAdapter;
 import com.platzi.silmood.the_fm.io.model.HypedArtistResponse;
@@ -65,11 +63,7 @@ public class HypedArtistsFragment extends Fragment implements Callback<HypedArti
     }
 
     private void requestHypedArtists() {
-        LastFmApiAdapter.getHypedArtist()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(hypedArtistResponse -> {
-                    adapter.addAll(hypedArtistResponse.getArtists());
-                });
+        LastFmApiAdapter.getHypedArtists(this);
     }
 
 
@@ -90,5 +84,7 @@ public class HypedArtistsFragment extends Fragment implements Callback<HypedArti
         if (error.getKind() == RetrofitError.Kind.NETWORK) {
             Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_LONG).show();
         }
+        
+        error.printStackTrace();
     }
 }

@@ -36,6 +36,7 @@ public class HypedArtistResponse {
 
     private class MainResponse {
 
+        @SerializedName(JsonKeys.ARTISTS_ARRAY)
         private ArrayList<Artist> artists;
 
     }

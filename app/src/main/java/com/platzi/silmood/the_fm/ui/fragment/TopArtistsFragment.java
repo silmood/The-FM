@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.platzi.silmood.the_fm.R;
 import com.platzi.silmood.the_fm.io.LastFmApiAdapter;
@@ -16,8 +17,12 @@ import com.platzi.silmood.the_fm.io.model.TopArtistsResponse;
 import com.platzi.silmood.the_fm.ui.ItemDividerDecoration;
 import com.platzi.silmood.the_fm.ui.adapter.TopArtistAdapter;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +39,7 @@ import rx.functions.Action1;
  * <p>
  * Created by Pedro Hernández on 07/2015.
  */
-public class TopArtistsFragment extends Fragment {
+public class TopArtistsFragment extends Fragment implements Callback<TopArtistsResponse> {
 
     private RecyclerView artistList;
     private TopArtistAdapter adapter;
@@ -53,11 +58,7 @@ public class TopArtistsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        LastFmApiAdapter.getTopArtist()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topArtistsResponse -> {
-                    adapter.addAll(topArtistsResponse.getArtists());
-                });
+        LastFmApiAdapter.getTopArtists(this);
     }
 
     private void setupList() {
@@ -66,4 +67,17 @@ public class TopArtistsFragment extends Fragment {
         artistList.addItemDecoration(new ItemDividerDecoration(getActivity()));
     }
 
+    @Override
+    public void success(TopArtistsResponse topArtistsResponse, Response response) {
+        adapter.addAll(topArtistsResponse.getArtists());
+    }
+
+    @Override
+    public void failure(RetrofitError error) {
+        if (error.getKind() == RetrofitError.Kind.NETWORK) {
+            Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_LONG).show();
+        }
+
+        error.printStackTrace();
+    }
 }
